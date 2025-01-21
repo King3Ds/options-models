@@ -3,7 +3,7 @@ import yfinance as yf
 from datetime import datetime, timedelta
 
 # Coss, Ross & Rubinstein Method - recombining tree and same size
-def binomial_model(s: float, k: float, t: float, r: float, sigma: float, n: int, option_type: str = 'C') -> float:
+def binomial(s: float, k: float, t: float, r: float, sigma: float, n: int, option_type: str = 'C') -> float:
     """
     :param s: initial stock price
     :param k: strike price
@@ -70,7 +70,7 @@ def helper_function(s, k, r, q, dt, u, i, option_values, option_type='C') -> flo
         return helper_function(s, k, r, q, dt, u, i-1, option_values, option_type)
 
 # Version 2 CRR using recursion
-def binomial_model_recursive(s: float, k: float, t: float, r: float, sigma: float, n: int, option_type: str = 'C'):
+def binomial_recursive(s: float, k: float, t: float, r: float, sigma: float, n: int, option_type: str = 'C') -> float:
     """
     :param s: initial stock price
     :param k: strike price
@@ -100,30 +100,3 @@ def binomial_model_recursive(s: float, k: float, t: float, r: float, sigma: floa
 
     # backward induction
     return helper_function(s, k, r, q, dt, u, n-1, option_values, option_type)
-
-def main():
-    # attain user's input values
-    # print("Please answer the following questions to determine the fair premium value")
-    # s = float(input("Initial price of the stock: "))
-    # k = float(input("Stick price: "))
-    # t = float(input("Time until expiration (in years): "))
-    # r = float(input("Risk-free rate (as a decimal): "))
-    # sigma = float(input("Volatility (as a decimal): "))
-    # n = int(input("Number of time steps: "))
-    ticker = yf.Ticker("TSLA")
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=252)
-    hist = ticker.history(start=start_date, end = end_date)
-    s = hist['Close'].iloc[-1]
-    k = s
-    t = 30 / 252
-    r = .0436
-    sigma = hist['Close'].pct_change().std() * np.sqrt(252)
-    n = 100
-
-    # prints the fair premium value
-    print(binomial_model_recursive(s, k, t, r, sigma, n))
-    print(binomial_model(s, k, t, r, sigma, n))
-
-if __name__ == "__main__":
-    main()

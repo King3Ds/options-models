@@ -1,15 +1,15 @@
 import numpy as np
 from scipy.stats import norm
 
-def black_scholes(s: float, k: float, t: float, r: float, sigma: float, option_type: str = 'C'):
+def black_scholes(s: float, k: float, t: float, r: float, sigma: float, option_type: str = 'C') -> float:
     """
-    :param s: price of the stock
+    :param s: initial stock price
     :param k: strike price
-    :param t:
-    :param r:
-    :param sigma:
-    :param option_type:
-    :return:
+    :param t: time to expiration
+    :param r: risk-free rate
+    :param sigma: volatility of underlying asset
+    :param option_type: type of the option w/ call option as default
+    :return: fair value of the premium for the options contract
     """
     d_1 = (np.log(s/k) + (r + (sigma**2)/2)*t) / (sigma * np.sqrt(t))
     d_2 = d_1 - sigma * np.sqrt(t)
